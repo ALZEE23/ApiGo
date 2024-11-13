@@ -3,31 +3,29 @@ package main
 import (
 	"github.com/ALZEE23/ApiGo/database"
 	"github.com/ALZEE23/ApiGo/handlers"
-	"github.com/gofiber/fiber/v2"
+	"github.com/ALZEE23/ApiGo/middlewares"
+	"github.com/gin-gonic/gin"
 )
 
-func setupRoutes(app *fiber.App) {
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello,!")
-	})
-
-	app.Get("/test", func(c *fiber.Ctx) error {
-		return c.SendString("Test!")
-	})
-
-	app.Get("/fact", handlers.Home)
-
-	app.Post("/fact", func(c *fiber.Ctx) error {
-		return c.SendString("WTF ITS WORK?? YOLOOO")
-	})
+func setupRoutes() *gin.Engine {
+	router := gin.Default()
+	api := router.Group("/api")
+	{
+		api.GET("/ping", handlers.Ping)
+		api.POST("/token", handlers.GenerateToken)
+		api.POST("/user/register", handlers.RegisterUser)
+		secured := api.Group("/secured").Use(middlewares.Auth())
+		{
+			secured.GET("/ping", handlers.Ping)
+		}
+	}
+	return router
 
 }
 
 func main() {
 	database.ConnectDb()
-	app := fiber.New()
+	app := setupRoutes()
 
-	setupRoutes(app)
-
-	app.Listen(":3000")
+	app.Run(":3000")
 }
