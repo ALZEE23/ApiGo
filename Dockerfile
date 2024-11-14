@@ -1,8 +1,13 @@
-FROM golang:1.22.4
+FROM golang:1.23-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 RUN go install github.com/air-verse/air@v1.52.3
 
-COPY . .
+COPY . ./
 RUN go mod tidy
+
+CMD [ "air", "-c", ".air.toml" ]
+
+
+

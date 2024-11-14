@@ -11,6 +11,7 @@ func setupRoutes() *gin.Engine {
 	router := gin.Default()
 	api := router.Group("/api")
 	{
+		api.GET("/", handlers.Test)
 		api.GET("/ping", handlers.Ping)
 		api.POST("/token", handlers.GenerateToken)
 		api.POST("/user/register", handlers.RegisterUser)
