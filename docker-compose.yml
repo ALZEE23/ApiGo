@@ -10,7 +10,7 @@ services:
     ports:  
       - "3000:3000"
     volumes:
-      - ./:/app
+      - ./:/usr/src/app
     command: air ./cmd/main.go -b 0.0.0.0
     networks:
       - app-network

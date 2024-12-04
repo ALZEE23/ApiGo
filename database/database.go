@@ -9,7 +9,7 @@ import (
     "gorm.io/driver/postgres"
     "gorm.io/gorm"
     "gorm.io/gorm/logger"
-)	
+)
 
 type Dbinstance struct {
     Db *gorm.DB
@@ -38,7 +38,7 @@ func ConnectDb() {
     db.Logger = logger.Default.LogMode(logger.Info)
 
     log.Println("running migrations")
-    db.AutoMigrate(&models.User{})
+    db.AutoMigrate(&models.User{},&models.Apk{})
 
     DB = Dbinstance{
         Db: db,

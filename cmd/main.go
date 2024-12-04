@@ -21,7 +21,6 @@ func setupRoutes() *gin.Engine {
 		}
 	}
 	return router
-
 }
 
 func main() {
