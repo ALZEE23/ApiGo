@@ -12,12 +12,14 @@ func setupRoutes() *gin.Engine {
 	api := router.Group("/api")
 	{
 		api.GET("/", handlers.Test)
-		api.GET("/ping", handlers.Ping)
 		api.POST("/token", handlers.GenerateToken)
 		api.POST("/user/register", handlers.RegisterUser)
+		api.POST("/apk", handlers.Apk)
+		api.GET("/apk", handlers.GetApk)
 		secured := api.Group("/secured").Use(middlewares.Auth())
 		{
 			secured.GET("/ping", handlers.Ping)
+			secured.POST("/apk", handlers.Apk)
 		}
 	}
 	return router
