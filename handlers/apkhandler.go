@@ -28,27 +28,26 @@ func Apk(context *gin.Context) {
 		return
 	}
 
-	footagePath := filepath.Join("storage", footageHeader.Filename)
+	footagePath := filepath.Join("/storage", footageHeader.Filename)
 	if err := context.SaveUploadedFile(footageHeader, footagePath); err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save footage file"})
 		return
 	}
 
-	coverPath := filepath.Join("storage", coverHeader.Filename)
+	coverPath := filepath.Join("/storage", coverHeader.Filename)
 	if err := context.SaveUploadedFile(coverHeader, coverPath); err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save cover file"})
 		return
 	}
 
 	var apk models.Apk
-	if err := context.ShouldBindJSON(&apk); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		context.Abort()
-		return
-	}
-
+	apk.Name = context.PostForm("name")
+	apk.Game = context.PostForm("game")
+	apk.Title = context.PostForm("title")
+	apk.Description = context.PostForm("description")
 	apk.Footage = footagePath
 	apk.Cover = coverPath
+
 
 	record := database.DB.Db.Create(&apk)
 	if record.Error != nil {
