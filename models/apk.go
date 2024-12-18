@@ -12,4 +12,5 @@ type Apk struct {
 	Description string `json:"description" form:"description"`
 	Game        string `json:"game" form:"game"`
 	Footage     string `json:"footage"`
+	Creator     string `json:"creator" form:"creator"`
 }

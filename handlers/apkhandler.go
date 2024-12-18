@@ -28,13 +28,13 @@ func Apk(context *gin.Context) {
 		return
 	}
 
-	footagePath := filepath.Join("/storage", footageHeader.Filename)
+	footagePath := filepath.Join("storage", footageHeader.Filename)
 	if err := context.SaveUploadedFile(footageHeader, footagePath); err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save footage file"})
 		return
 	}
 
-	coverPath := filepath.Join("/storage", coverHeader.Filename)
+	coverPath := filepath.Join("storage", coverHeader.Filename)
 	if err := context.SaveUploadedFile(coverHeader, coverPath); err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save cover file"})
 		return
@@ -42,12 +42,12 @@ func Apk(context *gin.Context) {
 
 	var apk models.Apk
 	apk.Name = context.PostForm("name")
+	apk.Creator = context.PostForm("creator")
 	apk.Game = context.PostForm("game")
 	apk.Title = context.PostForm("title")
 	apk.Description = context.PostForm("description")
 	apk.Footage = footagePath
 	apk.Cover = coverPath
-
 
 	record := database.DB.Db.Create(&apk)
 	if record.Error != nil {
@@ -55,7 +55,7 @@ func Apk(context *gin.Context) {
 		context.Abort()
 		return
 	}
-	context.JSON(http.StatusCreated, gin.H{"apkId": apk.ID, "name": apk.Name, "game": apk.Game, "cover": apk.Cover, "title": apk.Title, "description": apk.Description, "footage": apk.Footage})
+	context.JSON(http.StatusCreated, gin.H{"apkId": apk.ID, "name": apk.Name, "game": apk.Game, "cover": apk.Cover, "title": apk.Title, "description": apk.Description, "footage": apk.Footage, "creator": apk.Creator})
 }
 
 var retData struct {
